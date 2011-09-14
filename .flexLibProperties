@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.akamai.osmf.AkamaiBasicStreamingPluginInfo"/>
+    <classEntry path="com.akamai.osmf.net.AkamaiNetConnection"/>
+    <classEntry path="com.akamai.osmf.net.AkamaiNetConnectionFactory"/>
+    <classEntry path="com.akamai.osmf.net.AkamaiNetLoader"/>
+    <classEntry path="com.akamai.osmf.net.AkamaiNetStream"/>
+    <classEntry path="com.realeyes.osmf.components.PluginPlayer"/>
+    <classEntry path="com.realeyes.osmf.elements.PreviewProxySerialElement"/>
+    <classEntry path="com.realeyes.osmf.elements.WatermarkProxyElement"/>
+    <classEntry path="com.realeyes.osmf.events.DebugEvent"/>
+    <classEntry path="com.realeyes.osmf.interfaces.IPlugablePlayer"/>
+    <classEntry path="com.realeyes.osmf.interfaces.IVideoShell"/>
+    <classEntry path="com.realeyes.osmf.plugins.ControlBarPluginInfo"/>
+    <classEntry path="com.realeyes.osmf.plugins.PreviewProxyPluginInfo"/>
+    <classEntry path="com.realeyes.osmf.plugins.TrackerPluginInfo"/>
+    <classEntry path="com.realeyes.osmf.plugins.WatermarkProxyPluginInfo"/>
+    <classEntry path="com.realeyes.osmf.utils.PluginUtils"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ClosedCaptionField"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ControlBar"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.IClosedCaptionField"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.IControlBar"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ILoadingIndicator"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ISkinElementBase"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ISkinSprite"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.LoadingIndicator"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ProgressBar"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.SkinElementBase"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.ToggleButton"/>
+    <classEntry path="com.realeyes.osmfplayer.controls.VolumeSlider"/>
+    <classEntry path="com.realeyes.osmfplayer.elements.BufferedVideoElement"/>
+    <classEntry path="com.realeyes.osmfplayer.elements.DisplayElement"/>
+    <classEntry path="com.realeyes.osmfplayer.elements.SkinContainerElement"/>
+    <classEntry path="com.realeyes.osmfplayer.events.ControlBarEvent"/>
+    <classEntry path="com.realeyes.osmfplayer.events.PlaylistEvent"/>
+    <classEntry path="com.realeyes.osmfplayer.events.RollOutToleranceEvent"/>
+    <classEntry path="com.realeyes.osmfplayer.events.ToggleButtonEvent"/>
+    <classEntry path="com.realeyes.osmfplayer.model.buffer.BufferManagerModel"/>
+    <classEntry path="com.realeyes.osmfplayer.model.buffer.BufferTimeItem"/>
+    <classEntry path="com.realeyes.osmfplayer.model.config.skin.ControlBarSkinElement"/>
+    <classEntry path="com.realeyes.osmfplayer.model.config.skin.ISkinElement"/>
+    <classEntry path="com.realeyes.osmfplayer.model.config.skin.SkinConfig"/>
+    <classEntry path="com.realeyes.osmfplayer.model.config.skin.SkinElement"/>
+    <classEntry path="com.realeyes.osmfplayer.model.layout.ControlBarItemVO"/>
+    <classEntry path="com.realeyes.osmfplayer.model.playlist.Playlist"/>
+    <classEntry path="com.realeyes.osmfplayer.model.playlist.PlaylistItem"/>
+    <classEntry path="com.realeyes.osmfplayer.net.RENetStreamBufferTrait"/>
+    <classEntry path="com.realeyes.osmfplayer.util.RollOutTolerance"/>
+    <classEntry path="com.realeyes.osmfplayer.util.net.FMSHost"/>
+    <classEntry path="com.realeyes.osmfplayer.util.net.FMSURL"/>
+    <classEntry path="com.realeyes.osmfplayer.util.net.NetStreamUtils"/>
+    <classEntry path="com.realeyes.osmfplayer.util.net.URL"/>
+    <classEntry path="com.realeyes.osmf.data.ChapterVO"/>
+    <classEntry path="com.realeyes.osmf.data.IChapter"/>
+    <classEntry path="com.realeyes.osmf.controls.ChapterHash"/>
+    <classEntry path="com.realeyes.osmf.controls.ChapterOverlay"/>
+    <classEntry path="com.realeyes.osmf.elements.IDOverlayElement"/>
+    <classEntry path="com.realeyes.osmf.data.IDOverlayVO"/>
+    <classEntry path="com.realeyes.osmf.controls.CanvasSprite"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
