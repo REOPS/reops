@@ -995,9 +995,12 @@ package com.realeyes.osmf.controls
 		{
 			_autoHideVolume = value;
 			
-			if( _autoHideVolume )
+			if( _autoHideVolume && volumeSlider_mc )
 			{
-				this.removeChild( volumeSlider_mc );
+				if( this.contains( volumeSlider_mc ) )
+				{
+					this.removeChild( volumeSlider_mc );
+				}
 				
 				if( !_volumeSliderRolloutTolerance )
 				{

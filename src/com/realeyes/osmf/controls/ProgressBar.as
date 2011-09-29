@@ -37,8 +37,8 @@ package com.realeyes.osmf.controls
 		protected var _currentLoadPercent:Number;
 		
 		protected var _dragging:Boolean = false;
-		protected var _scrubberPadding:Number = 0;
-		protected var _scrubberWidth:Number = 0;
+		//protected var _scrubberPadding:Number = 0;
+		//protected var _scrubberWidth:Number = 0;
 		protected var _activeRange:Number;
 		
 		protected var _isLive:Boolean;
@@ -68,13 +68,13 @@ package com.realeyes.osmf.controls
 			
 			if( scrubber_mc )
 			{
-				_scrubberWidth = scrubber_mc.width;
+				//_scrubberWidth = scrubber_mc.width;
 				scrubber_mc.toggle = false;
 			}
 			
-			_scrubberPadding = _scrubberWidth / 2;
+			//_scrubberPadding = _scrubberWidth / 2;
 			
-			_activeRange = bg_mc.width - _scrubberWidth;
+			_activeRange = bg_mc.width;// - _scrubberWidth;
 			
 			_initListeners();
 			
@@ -115,7 +115,8 @@ package com.realeyes.osmf.controls
 			//trace("current percent: " + (p_value) );
 			if( !_dragging )
 			{
-				current_mc.width = Math.round( _scrubberWidth + _activeRange * p_value );
+	//			current_mc.width = Math.round( _scrubberWidth + _activeRange * p_value );
+				current_mc.width = Math.round( _activeRange * p_value );
 				//trace("setCurrentBarPercent: " + p_value);
 				//current_mc.scaleX = p_value;
 				
@@ -139,7 +140,8 @@ package com.realeyes.osmf.controls
 		{
 			if( p_value <= 1 )
 			{
-				loaded_mc.width = Math.round( _scrubberWidth + _activeRange * p_value );
+	//			loaded_mc.width = Math.round( _scrubberWidth + _activeRange * p_value );
+				loaded_mc.width = Math.round( _activeRange * p_value );
 			}
 			else if( !isNaN( p_value ) )
 			{
@@ -167,6 +169,7 @@ package com.realeyes.osmf.controls
 			
 			if( !isLive )
 			{
+				//TODO - this should not bubble, need to refactor if necessary
 				dispatchEvent( new ControlBarEvent( ControlBarEvent.SEEK_PERCENT, scrubber_mc.x / _activeRange, true ) );
 			}
 		}
@@ -261,7 +264,8 @@ package com.realeyes.osmf.controls
 		{
 			bg_mc.width = value;
 			live_mc.width = value;
-			_activeRange = value - _scrubberWidth;
+	//		_activeRange = value - _scrubberWidth;
+			_activeRange = value;
 			
 			setCurrentBarPercent( _currentPercent );
 			setLoadBarPercent( _currentLoadPercent );
@@ -298,7 +302,8 @@ package com.realeyes.osmf.controls
 		{
 			if( !scrubber_mc || p_evt.target != scrubber_mc && !isLive )
 			{
-				dispatchEvent( new ControlBarEvent( ControlBarEvent.SEEK_PERCENT, ( mouseX - _scrubberPadding ) / _activeRange, true ) );
+	//			dispatchEvent( new ControlBarEvent( ControlBarEvent.SEEK_PERCENT, ( mouseX - _scrubberPadding ) / _activeRange, true ) );
+				dispatchEvent( new ControlBarEvent( ControlBarEvent.SEEK_PERCENT, ( mouseX ) / _activeRange, true ) );
 			}
 		}
 		
@@ -339,7 +344,8 @@ package com.realeyes.osmf.controls
 		 */
 		private function _onScrubberMouseMove( p_evt:MouseEvent ):void
 		{
-			current_mc.width = scrubber_mc.x + _scrubberPadding;
+	//		current_mc.width = scrubber_mc.x + _scrubberPadding;
+			current_mc.width = scrubber_mc.x;
 		}
 		
 		/**
