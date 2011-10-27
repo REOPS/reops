@@ -102,6 +102,7 @@ package com.realeyes.osmf.components
 		
 		public static const NET_CONNECTION_CHANGE:String = "netConnectionChange";
 		public static const NET_STREAM_CHANGE:String = "netStreamChange";
+		public static const NET_GROUP_CHANGE:String = "netGroupChange";
 		public static const PLUGINS_COMPLETE:String = "pluginsComplete";
 		public static const PLUGINS_SUCCESSFUL:String = "pluginsSuccessful";
 		public static const PLUGINS_LOADING:String = "pluginsLoading";
@@ -622,6 +623,29 @@ package com.realeyes.osmf.components
 			}
 		}
 		
+		[Bindable(event="netGroupChange")]
+		public function get netGroup():NetGroup
+		{
+			return _netGroup;
+		}
+		
+		public function set netGroup(value:NetGroup):void
+		{
+			if( _netGroup !== value)
+			{
+				_netGroup = value;
+				dispatchEvent(new Event( NET_GROUP_CHANGE ));
+				
+				if( _netGroup )
+				{
+					_netGroup.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
+					_netGroup.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
+					
+				}
+			}
+		}
+		
+		
 		
 		[Bindable(event="netConnectionChange")]
 		public function get netConnection():NetConnection
@@ -869,7 +893,7 @@ package com.realeyes.osmf.components
 				{
 					netStream = event.target.netStream;
 					netConnection = event.target.connection;
-					_netGroup = event.target.netGroup;
+					netGroup = event.target.netGroup;
 					break;
 				};
 					
@@ -899,6 +923,17 @@ package com.realeyes.osmf.components
 					{
 						netStream.multicastWindowDuration = multicastWindowDuration;
 					}
+					
+					break;
+				}
+					
+				case "NetGroup.MulticastStream.UnpublishNotify":
+				{
+					
+					break;
+				}
+				case "NetGroup.MulticastStream.PublishNotify":
+				{
 					
 					break;
 				}
