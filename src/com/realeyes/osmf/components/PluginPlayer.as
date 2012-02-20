@@ -53,6 +53,7 @@ package com.realeyes.osmf.components
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.net.NetStreamLoadTrait;
 	
 	[Event(name="pluginsSuccessful", type="com.realeyes.osmf.player.PluginPlayer")]
 	[Event(name="pluginsComplete", type="flash.events.Event")]
@@ -891,9 +892,12 @@ package com.realeyes.osmf.components
 			{
 				case LoadState.READY:
 				{
-					netStream = event.target.netStream;
-					netConnection = event.target.connection;
-					netGroup = event.target.netGroup;
+					if( event.target is NetStreamLoadTrait )
+					{
+						netStream = event.target.netStream;
+						netConnection = event.target.connection;
+						netGroup = event.target.netGroup;
+					}
 					break;
 				};
 					
