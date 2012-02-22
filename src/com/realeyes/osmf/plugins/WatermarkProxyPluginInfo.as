@@ -88,7 +88,10 @@ package com.realeyes.osmf.plugins
 		protected function debug( msg:String ):void 
 		{
 			//trace( msg );
-			_vidShell.debug( msg );
+			if( _vidShell )
+			{
+				_vidShell.debug( msg );
+			}
 		}
 	}
 }
