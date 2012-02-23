@@ -15,6 +15,7 @@ package com.realeyes.osmf.plugins
 	import org.osmf.media.MediaFactoryItemType;
 	import org.osmf.media.MediaResourceBase;
 	import org.osmf.media.PluginInfo;
+	import org.osmf.metadata.Metadata;
 	import org.osmf.net.NetLoader;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
@@ -75,7 +76,16 @@ package com.realeyes.osmf.plugins
 		 */	
 		override public function initializePlugin( resource:MediaResourceBase ):void
 		{
-			_assetPath = resource.getMetadataValue( NAMESPACE ) as String;
+			var metadata:Object = resource.getMetadataValue( NAMESPACE );
+			if( metadata is String )
+			{
+				_assetPath = metadata as String;
+			}
+			else if( metadata is Metadata )
+			{
+				_assetPath = Metadata( metadata ).getValue( 'assetPath' ) as String;
+			}
+			
 			_vidShell = resource.getMetadataValue( PluginUtils.SHELL ) as IVideoShell;
 			debug( "WatermarkProxyPluginInfo - Initialized" );
 		}

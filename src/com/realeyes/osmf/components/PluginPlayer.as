@@ -106,9 +106,10 @@ package com.realeyes.osmf.components
 		public static const NET_GROUP_CHANGE:String = "netGroupChange";
 		public static const PLUGINS_COMPLETE:String = "pluginsComplete";
 		public static const PLUGINS_SUCCESSFUL:String = "pluginsSuccessful";
-		public static const PLUGINS_LOADING:String = "pluginsLoading";
 		public static const PLAYER_READY:String = "playerReady";
 		public static const DEBUG:String = "debug";
+		
+		public static const PLUGINS_LOADING:String = "pluginsLoading";
 		
 		static public const NAMESPACE:String = "com.realeyes.osmf.components.PluginPlayer";
 		
