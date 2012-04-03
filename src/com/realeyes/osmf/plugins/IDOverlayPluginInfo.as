@@ -123,6 +123,9 @@ package com.realeyes.osmf.plugins
 				_currentElement.removeEventListener( ContainerChangeEvent.CONTAINER_CHANGE, _onContainerChange );
 			}
 			
+			debug( "linkElementForControl: " + element);
+			debug( "Container: " + element.container);
+			
 			_currentElement = element;
 			
 			
@@ -135,6 +138,8 @@ package com.realeyes.osmf.plugins
 		
 		private function _addElements():void
 		{
+			debug( "_addElements" );
+			
 			if( !_idOverlayElement )
 			{
 				
@@ -164,6 +169,8 @@ package com.realeyes.osmf.plugins
 					}
 					case FINGERPRINT:
 					{
+						debug( "--FINGERPRINT--" );
+						
 						_idOverlayElement = new IDFingerprintElement( _currentContainer, idOverlayVO );
 						overlayLayout.percentWidth = 100;
 						overlayLayout.percentHeight = 100;
@@ -199,6 +206,8 @@ package com.realeyes.osmf.plugins
 		
 		private function _onContainerChange( event:ContainerChangeEvent ):void
 		{
+			debug("--CONTAINER CHANGE-- " + event.target.container);
+			
 			if( event.oldContainer )
 			{	
 				//clear the skin element 

@@ -63,10 +63,11 @@ package com.realeyes.osmf.elements
 				//create the elements that will be used to construct the serial composition
 				
 				//basic preroll - hardcoded media, path could be passed on meta data as well
-				_preRoll = new VideoElement( new URLResource( "http://mediapm.edgesuite.net/osmf/content/test/logo_animated.flv" ) );
+				_preRoll = new VideoElement( new URLResource( "rtmp://127.0.0.1/vod/mp4:osmf.f4v" ) );
 				
 				//store the path (URI) to the original content for use later if authorized for full playback
 				_path = (value.resource as URLResource).url;
+				//_path = "rtmp://127.0.0.1/vod/mp4:sample1_500kbps.f4v";
 				
 				//generate a subclip style preview of the main media content, clipped from the start time (0) to the _previewDuration
 				_preview = new VideoElement( new StreamingURLResource( _path, StreamType.RECORDED, 0, _previewDuration ) );
@@ -114,16 +115,18 @@ package com.realeyes.osmf.elements
 			this.dispatchEvent( new DebugEvent( DebugEvent.DEBUG, "USER ANSWER: " + event.data ) );
 			
 			//if the data property of the EventData caught from the quiz display object is "money" then play the full content!
-			if( event.data == "money")
+			if( event.data == "yes")
 			{
 				this.dispatchEvent( new DebugEvent( DebugEvent.DEBUG, "PASSPHRASE CORRECT - Media Unlocked!" ) );
-				/*_serialElement.removeChild( _preRoll );
+				_serialElement.removeChild( _preRoll );
 				_serialElement.removeChild( _preview );
 				_serialElement.removeChild( _quiz );
-				_serialElement.addChild( new VideoElement( new URLResource( _path ) ) );*/
+				_serialElement.addChild( new VideoElement( new URLResource( _path ) ) );
+				
+				
 				
 				//NOTE!!! If you ever set the super.proxiedElement it resets whats playing - thats COOL!!!
-				super.proxiedElement = new VideoElement( new StreamingURLResource( _path, StreamType.RECORDED, _previewDuration - 5  ) );
+				//super.proxiedElement = new VideoElement( new StreamingURLResource( _path, StreamType.RECORDED, _previewDuration - 5  ) );
 			}
 			
 		}

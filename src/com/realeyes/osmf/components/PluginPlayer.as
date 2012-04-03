@@ -10,6 +10,7 @@ package com.realeyes.osmf.components
 	import com.realeyes.osmf.interfaces.IVideoShell;
 	import com.realeyes.osmf.plugins.RESkinPluginInfo;
 	import com.realeyes.osmf.utils.PluginUtils;
+	import com.realeyes.osmf.utils.net.NetStreamUtils;
 	
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -46,6 +47,7 @@ package com.realeyes.osmf.components
 	import org.osmf.media.PluginInfoResource;
 	import org.osmf.media.URLResource;
 	import org.osmf.metadata.Metadata;
+	import org.osmf.metadata.MetadataNamespaces;
 	import org.osmf.net.StreamingURLResource;
 	import org.osmf.traits.DRMState;
 	import org.osmf.traits.DRMTrait;
@@ -99,6 +101,10 @@ package com.realeyes.osmf.components
 		private var _netGroup:NetGroup;
 		private var _netStream:NetStream;
 		private var _multicastWindowDuration:Number;
+		
+		
+		private var _inBufferSeek:Boolean;
+		private var _backBufferTime:Number;
 		
 		public static const NET_CONNECTION_CHANGE:String = "netConnectionChange";
 		public static const NET_STREAM_CHANGE:String = "netStreamChange";
@@ -505,6 +511,10 @@ package com.realeyes.osmf.components
 			if( _mediaElement )
 			{
 				clearMediaElement( _mediaElement );
+				
+				var loadTrait:LoadTrait = _mediaElement.getTrait(MediaTraitType.LOAD) as LoadTrait;
+				loadTrait.unload();
+				
 				_mediaElement.removeEventListener(MediaElementEvent.TRAIT_ADD, onMediaElementTraitAdd);
 			}
 			
@@ -514,6 +524,18 @@ package com.realeyes.osmf.components
 				drmTrait = null;
 				drmState = "";
 			}
+			
+		}
+		
+		
+		public function isRTMPStream( path:String ):Boolean
+		{
+			return  NetStreamUtils.isRTMPStream( path );
+		}
+		
+		public function isHDSStream( urlResource:URLResource ):Boolean
+		{
+			return urlResource.getMetadataValue(MetadataNamespaces.HTTP_STREAMING_METADATA) != null;
 			
 		}
 		
@@ -607,16 +629,23 @@ package com.realeyes.osmf.components
 		
 		public function set netStream(value:NetStream):void
 		{
-			if( _netStream !== value)
+			if( value && _netStream !== value)
 			{
 				_netStream = value;
 				dispatchEvent(new Event(NET_STREAM_CHANGE));
 				
-				if( _netStream )
+				
+				_netStream.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
+				_netStream.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
+				
+				if( inBufferSeek )
 				{
-					_netStream.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
-					_netStream.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
-					
+					_netStream.inBufferSeek = inBufferSeek;
+				}
+				
+				if( backBufferTime )
+				{
+					_netStream.backBufferTime = backBufferTime;
 				}
 				
 			}
@@ -653,7 +682,34 @@ package com.realeyes.osmf.components
 			}
 		}
 		
+		public function get inBufferSeek():Boolean
+		{
+			return _inBufferSeek;
+		}
 		
+		public function set inBufferSeek(value:Boolean):void
+		{
+			_inBufferSeek = value;
+			if( netStream )
+			{
+				netStream.inBufferSeek = value;
+			}
+		}
+		
+		public function get backBufferTime():Number
+		{
+			return _backBufferTime;
+		}
+		
+		public function set backBufferTime(value:Number):void
+		{
+			_backBufferTime = value;
+			
+			if( netStream )
+			{
+				netStream.backBufferTime = value;
+			}
+		}
 		
 		override public function get width():Number
 		{
@@ -867,9 +923,16 @@ package com.realeyes.osmf.components
 			{
 				case LoadState.READY:
 				{
-					netStream = event.target.netStream;
-					netConnection = event.target.connection;
-					_netGroup = event.target.netGroup;
+					try
+					{
+						netStream = event.target.netStream;
+						netConnection = event.target.connection;
+						_netGroup = event.target.netGroup;
+					}
+					catch( e:Error)
+					{
+						trace("PluginPlayer: Error setting internals");
+					}
 					break;
 				};
 					

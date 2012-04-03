@@ -1,13 +1,17 @@
+
 package com.realeyes.osmf.plugins
 {
-	import com.realeyes.osmf.elements.PreviewProxySerialElement;
+	import com.realeyes.osmf.data.IDOverlayVO;
+	import com.realeyes.osmf.elements.IDProxyElement;
 	import com.realeyes.osmf.elements.WatermarkProxyElement;
 	import com.realeyes.osmf.events.DebugEvent;
 	import com.realeyes.osmf.interfaces.IVideoShell;
 	import com.realeyes.osmf.utils.PluginUtils;
 	
 	import flash.external.ExternalInterface;
+	import flash.text.TextFormat;
 	
+	import org.osmf.elements.ProxyElement;
 	import org.osmf.events.MediaElementEvent;
 	import org.osmf.events.TimeEvent;
 	import org.osmf.media.MediaElement;
@@ -19,26 +23,25 @@ package com.realeyes.osmf.plugins
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.TimeTrait;
 	
-	public class PreviewProxyPluginInfo extends PluginInfo
+	public class IDProxyPluginInfo extends PluginInfo
 	{
 		// Plugin Namespace
-		static public const NAMESPACE:String = "com.realeyes.osmf.plugins.PreviewProxyPluginInfo";
+		static public const NAMESPACE:String = "com.realeyes.osmf.plugins.IDProxyPluginInfo";
 		
 		private var _assetPath:String;
-		private var _previewDuration:uint;
 		private var _vidShell:IVideoShell;
 		private var _currentElement:MediaElement;
+		private var _jsDebug:Boolean;
 		
+		
+		protected var idOverlayVO:IDOverlayVO;
 		
 		///////////////////////////////////////////////////
 		// CONSTRUCTOR
 		///////////////////////////////////////////////////
-		private var _jsDebug:Boolean;
 		
-		public function PreviewProxyPluginInfo( mediaFactoryItems:Vector.<MediaFactoryItem>=null, mediaElementCreationNotificationFunction:Function=null )
+		public function IDProxyPluginInfo( mediaFactoryItems:Vector.<MediaFactoryItem>=null, mediaElementCreationNotificationFunction:Function=null )
 		{
-			
-			
 			//Specify the media items that this plugin will handle 
 			var items:Vector.<MediaFactoryItem> = new Vector.<MediaFactoryItem>();
 			
@@ -52,25 +55,23 @@ package com.realeyes.osmf.plugins
 			);
 			items.push( item );
 			
-			//pass the Vector of MediaFacttoryItems, and pass along the default for the notification function
 			super( items, mediaElementCreationNotificationFunction );
 		}
+		
 		
 		/**
 		 *Function that will generate the MediaElement for the MediaFactory if the can handle resource is true for the resouce loading 
 		 * Since this is a proxy plugin it generates a subclass of the ProxYElement and returns it.
 		 *  @return 
 		 * 
-		 */		
-		public function createMediaElement():Object
+		 */	
+		public function createMediaElement():ProxyElement
 		{
-			debug( "Create preview proxy element element" );
-			//Create a new PreviewProxySerialElement and pass it the assetPath and the previewDuration
-			var proxy:PreviewProxySerialElement = new PreviewProxySerialElement( _assetPath, _previewDuration );
-			proxy.addEventListener( DebugEvent.DEBUG, _onDebugEvent, false, 0, true );
-			return proxy;
+			debug( "Create ID proxy element element" );
+			
+			//Create and return a new WatermarkProxyElement and pass it the asset use as the watermark
+			return new IDProxyElement( idOverlayVO, 400, 300);
 		}
-		
 		
 		
 		
@@ -82,28 +83,25 @@ package com.realeyes.osmf.plugins
 		 */	
 		override public function initializePlugin( resource:MediaResourceBase ):void
 		{
-			var metaData:XML = new XML( resource.getMetadataValue( NAMESPACE ) );
-			
-			//parse and store the assetPath and previewDuration for use with the proxy element
-			_assetPath = metaData.assetPath || "http://localhost:8134/kaltura/quiz.swf";
-			_previewDuration = metaData.previewDuration || 5;
-			
-			_vidShell = resource.getMetadataValue( PluginUtils.SHELL ) as IVideoShell;
-			
+			_assetPath = resource.getMetadataValue( NAMESPACE ) as String;
 			
 			_jsDebug = Boolean( resource.getMetadataValue( "jsDebug" ) );
 			
-			debug( "PreviewProxyPluginInfo - Initialized" );
+			//_vidShell = resource.getMetadataValue( PluginUtils.SHELL ) as IVideoShell;
+			debug( "IDProxyPluginInfo - Initialized" );
 			
-			debug("_assetPath: " + _assetPath );
-			debug("_previewDuration: " + _previewDuration );
+			
+			var type:String = IDOverlayPluginInfo.FINGERPRINT;
+			var overlayID:String = String( resource.getMetadataValue("overlayID") );
+			var separator:String = " | ";
+			var format:TextFormat = new TextFormat("_sans", 10, 0xFFFFFF);
+			var alpha:Number = .5;
+			
+			
+			
+			idOverlayVO = new IDOverlayVO( type, overlayID, separator, format, alpha );
 		}
 		
-		
-		private function _onDebugEvent( event:DebugEvent ):void
-		{
-			debug( event.message );
-		}
 		
 		// ==================================================
 		// Helper methods
@@ -112,7 +110,7 @@ package com.realeyes.osmf.plugins
 		protected function debug( msg:String ):void 
 		{
 			//trace( msg );
-			if(_vidShell)
+			if( _vidShell )
 			{
 				_vidShell.debug( msg );
 			}

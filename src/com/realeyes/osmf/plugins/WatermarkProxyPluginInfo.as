@@ -27,6 +27,7 @@ package com.realeyes.osmf.plugins
 		private var _assetPath:String;
 		private var _vidShell:IVideoShell;
 		private var _currentElement:MediaElement;
+		private var _jsDebug:Boolean;
 		
 		///////////////////////////////////////////////////
 		// CONSTRUCTOR
@@ -76,7 +77,10 @@ package com.realeyes.osmf.plugins
 		override public function initializePlugin( resource:MediaResourceBase ):void
 		{
 			_assetPath = resource.getMetadataValue( NAMESPACE ) as String;
-			_vidShell = resource.getMetadataValue( PluginUtils.SHELL ) as IVideoShell;
+			
+			_jsDebug = Boolean( resource.getMetadataValue( "jsDebug" ) );
+			
+			//_vidShell = resource.getMetadataValue( PluginUtils.SHELL ) as IVideoShell;
 			debug( "WatermarkProxyPluginInfo - Initialized" );
 		}
 		
@@ -88,7 +92,16 @@ package com.realeyes.osmf.plugins
 		protected function debug( msg:String ):void 
 		{
 			//trace( msg );
-			_vidShell.debug( msg );
+			if( _vidShell )
+			{
+				_vidShell.debug( msg );
+			}
+			
+			if( _jsDebug )
+			{
+				ExternalInterface.call( "debug", msg );
+				//ExternalInterface.call( "alert", msg );
+			}
 		}
 	}
 }

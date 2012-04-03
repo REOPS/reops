@@ -23,6 +23,7 @@ package com.realeyes.osmf.plugins
 		// Plugin Namespace
 		static public const NAMESPACE:String = "com.realeyes.osmf.plugins.TrackerPluginInfo";
 		
+		private var _jsDebug:Boolean;
 		private var _vidShell:IVideoShell;
 		private var _currentElement:MediaElement;
 		
@@ -48,7 +49,7 @@ package com.realeyes.osmf.plugins
 		
 		override public function initializePlugin( resource:MediaResourceBase ):void
 		{
-			
+			_jsDebug = Boolean( resource.getMetadataValue( "jsDebug" ) );
 			_vidShell = resource.getMetadataValue( PluginUtils.SHELL ) as IVideoShell;
 			
 			debug( "TrackerPluginInfo - Initialized" );
@@ -130,7 +131,16 @@ package com.realeyes.osmf.plugins
 		protected function debug( msg:String ):void 
 		{
 			//trace( msg );
-			_vidShell.debug( msg );
+			if( _vidShell )
+			{
+				_vidShell.debug( msg );
+			}
+			
+			if( _jsDebug )
+			{
+				ExternalInterface.call( "debug", msg );
+			}
+			
 		}
 	}
 }

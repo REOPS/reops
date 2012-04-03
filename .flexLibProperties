@@ -58,6 +58,7 @@
     <classEntry path="com.realeyes.osmf.elements.IDOverlayElement"/>
     <classEntry path="com.realeyes.osmf.data.IDOverlayVO"/>
     <classEntry path="com.realeyes.osmf.controls.CanvasSprite"/>
+    <classEntry path="com.realeyes.osmf.elements.StaticVideoElement"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
