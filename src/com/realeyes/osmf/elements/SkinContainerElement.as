@@ -4,6 +4,7 @@ package com.realeyes.osmf.elements
 	import com.realeyes.osmf.captioning.model.Caption;
 	import com.realeyes.osmf.captioning.model.CaptionFormat;
 	import com.realeyes.osmf.captioning.model.CaptionStyle;
+	import com.realeyes.osmf.controls.IAdvancedSkinElementBase;
 	import com.realeyes.osmf.controls.IClosedCaptionField;
 	import com.realeyes.osmf.controls.IControlBar;
 	import com.realeyes.osmf.controls.ILoadingIndicator;
@@ -785,6 +786,11 @@ package com.realeyes.osmf.elements
 			if( p_skinElement.elementClassString )
 			{
 				instance = _generateElements( p_skinElement );
+				
+				if( instance is IAdvancedSkinElementBase )
+				{
+					IAdvancedSkinElementBase( instance ).mediaPlayerCore = _mediaPlayerCore;
+				}
 				
 				element = new DisplayElement( instance as Sprite );
 				applyLayoutData( element, p_skinElement );

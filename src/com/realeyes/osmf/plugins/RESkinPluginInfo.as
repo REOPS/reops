@@ -141,13 +141,13 @@ package com.realeyes.osmf.plugins
 		
 		////////////////////////////////////////////////
 		
-		private function _addElements():void
+		protected function addElements():void
 		{
 			//if not already initialized, load up the skinElement
 			//if(!_skinElement)
 			//{
 			
-			_skinElement = new SkinContainerElement( _currentElement, _mediaPlayer );
+			_skinElement = getSkinElement();
 			//_skinElement.mediaContainer = _currentContainer;
 			_skinElement.loadFromXMLConfig( new XML( _resource.getMetadataValue( NAMESPACE ) ) );
 			
@@ -164,6 +164,17 @@ package com.realeyes.osmf.plugins
 				trace("ADD SKIN");
 				_currentContainer.addMediaElement( _skinElement );
 			}
+		}
+		
+		/**
+		 * Generates a SkinContainerElement to hold the skin elements.
+		 * Override this method to insert a custom SkinContainerElement with the default skin layout.
+		 * 
+		 * @return	SkinContainerElement
+		 */
+		protected function getSkinElement():SkinContainerElement
+		{
+			return new SkinContainerElement( _currentElement, _mediaPlayer );
 		}
 		
 		private function _clearElements():void
@@ -214,7 +225,7 @@ package com.realeyes.osmf.plugins
 				}
 				else
 				{
-					_addElements();
+					addElements();
 				}
 				/*if( _skinElement.controlBar ) //YES THIS IS A HACK - LEAVE ME ALONE (DH)
 				{
@@ -233,7 +244,7 @@ package com.realeyes.osmf.plugins
 		{
 			if(!_skinElement)
 			{
-				_addElements();
+				addElements();
 			}
 		}
 		

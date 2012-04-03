@@ -55,6 +55,7 @@ package com.realeyes.osmf.components
 	import org.osmf.traits.LoadTrait;
 	import org.osmf.traits.MediaTraitType;
 	import org.osmf.traits.PlayState;
+	import org.osmf.net.NetStreamLoadTrait;
 	
 	[Event(name="pluginsSuccessful", type="com.realeyes.osmf.player.PluginPlayer")]
 	[Event(name="pluginsComplete", type="flash.events.Event")]
@@ -108,11 +109,13 @@ package com.realeyes.osmf.components
 		
 		public static const NET_CONNECTION_CHANGE:String = "netConnectionChange";
 		public static const NET_STREAM_CHANGE:String = "netStreamChange";
+		public static const NET_GROUP_CHANGE:String = "netGroupChange";
 		public static const PLUGINS_COMPLETE:String = "pluginsComplete";
 		public static const PLUGINS_SUCCESSFUL:String = "pluginsSuccessful";
-		public static const PLUGINS_LOADING:String = "pluginsLoading";
 		public static const PLAYER_READY:String = "playerReady";
 		public static const DEBUG:String = "debug";
+		
+		public static const PLUGINS_LOADING:String = "pluginsLoading";
 		
 		static public const NAMESPACE:String = "com.realeyes.osmf.components.PluginPlayer";
 		
@@ -651,6 +654,29 @@ package com.realeyes.osmf.components
 			}
 		}
 		
+		[Bindable(event="netGroupChange")]
+		public function get netGroup():NetGroup
+		{
+			return _netGroup;
+		}
+		
+		public function set netGroup(value:NetGroup):void
+		{
+			if( _netGroup !== value)
+			{
+				_netGroup = value;
+				dispatchEvent(new Event( NET_GROUP_CHANGE ));
+				
+				if( _netGroup )
+				{
+					_netGroup.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
+					_netGroup.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
+					
+				}
+			}
+		}
+		
+		
 		
 		[Bindable(event="netConnectionChange")]
 		public function get netConnection():NetConnection
@@ -923,15 +949,11 @@ package com.realeyes.osmf.components
 			{
 				case LoadState.READY:
 				{
-					try
+					if( event.target is NetStreamLoadTrait )
 					{
 						netStream = event.target.netStream;
 						netConnection = event.target.connection;
-						_netGroup = event.target.netGroup;
-					}
-					catch( e:Error)
-					{
-						trace("PluginPlayer: Error setting internals");
+						netGroup = event.target.netGroup;
 					}
 					break;
 				};
@@ -962,6 +984,17 @@ package com.realeyes.osmf.components
 					{
 						netStream.multicastWindowDuration = multicastWindowDuration;
 					}
+					
+					break;
+				}
+					
+				case "NetGroup.MulticastStream.UnpublishNotify":
+				{
+					
+					break;
+				}
+				case "NetGroup.MulticastStream.PublishNotify":
+				{
 					
 					break;
 				}
