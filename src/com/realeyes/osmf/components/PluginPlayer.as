@@ -103,7 +103,6 @@ package com.realeyes.osmf.components
 		private var _netStream:NetStream;
 		private var _multicastWindowDuration:Number;
 		
-		
 		private var _inBufferSeek:Boolean;
 		private var _backBufferTime:Number;
 		
@@ -112,10 +111,9 @@ package com.realeyes.osmf.components
 		public static const NET_GROUP_CHANGE:String = "netGroupChange";
 		public static const PLUGINS_COMPLETE:String = "pluginsComplete";
 		public static const PLUGINS_SUCCESSFUL:String = "pluginsSuccessful";
+		public static const PLUGINS_LOADING:String = "pluginsLoading";
 		public static const PLAYER_READY:String = "playerReady";
 		public static const DEBUG:String = "debug";
-		
-		public static const PLUGINS_LOADING:String = "pluginsLoading";
 		
 		static public const NAMESPACE:String = "com.realeyes.osmf.components.PluginPlayer";
 		
@@ -632,14 +630,18 @@ package com.realeyes.osmf.components
 		
 		public function set netStream(value:NetStream):void
 		{
-			if( value && _netStream !== value)
+			if( _netStream !== value)
 			{
 				_netStream = value;
 				dispatchEvent(new Event(NET_STREAM_CHANGE));
 				
+				if( _netStream )
+				{
+					_netStream.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
+					_netStream.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
+					
+				}
 				
-				_netStream.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
-				_netStream.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
 				
 				if( inBufferSeek )
 				{
@@ -690,6 +692,13 @@ package com.realeyes.osmf.components
 			{
 				_netConnection = value;
 				dispatchEvent(new Event(NET_CONNECTION_CHANGE));
+				
+				if( _netConnection )
+				{
+					_netConnection.removeEventListener( NetStatusEvent.NET_STATUS, _onNetStatus );
+					_netConnection.addEventListener( NetStatusEvent.NET_STATUS, _onNetStatus, false, 0, true );
+					
+				}
 			}
 		}
 		
@@ -1000,8 +1009,8 @@ package com.realeyes.osmf.components
 				}
 			}
 			
-			
-			this.dispatchEvent( new Event( event.info.code ) );
+			trace(">> " + event.info.code);
+			this.dispatchEvent( new NetStatusEvent( event.info.code, false, false, event.info ) );
 			
 		}	
 
