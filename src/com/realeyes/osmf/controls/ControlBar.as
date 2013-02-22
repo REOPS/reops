@@ -469,7 +469,10 @@ package com.realeyes.osmf.controls
 		
 		public function hideAudioList():void
 		{
-			//overriden
+			if( this.contains( volumeSlider_mc ) )
+			{
+				this.removeChild( volumeSlider_mc );
+			}
 		}
 		
 		public function _updateLayout():void
