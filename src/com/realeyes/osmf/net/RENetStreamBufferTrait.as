@@ -13,7 +13,6 @@ package com.realeyes.osmf.net
 	import org.osmf.net.NetStreamCodes;
 	import org.osmf.net.NetStreamMetricsBase;
 	import org.osmf.net.httpstreaming.HTTPNetStream;
-	import org.osmf.net.httpstreaming.HTTPNetStreamMetrics;
 	import org.osmf.net.rtmpstreaming.RTMPNetStreamMetrics;
 	import org.osmf.traits.BufferTrait;
 	
